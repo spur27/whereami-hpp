@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#include <whereami.h>
+#include "../whereami.hpp"
 
 #if defined(_WIN32)
 
@@ -72,37 +72,11 @@ int main(int argc, char** argv)
   int length, dirname_length;
   int i;
 
-  length = wai_getExecutablePath(NULL, 0, &dirname_length);
-  if (length > 0)
-  {
-    path = (char*)malloc(length + 1);
-    if (!path)
-      abort();
-    wai_getExecutablePath(path, length, &dirname_length);
-    path[length] = '\0';
+  std::string executable_path = whereami::getExecutablePath();
+  printf("executable: %s\n", executable_path.c_str());
 
-    printf("executable path: %s\n", path);
-    path[dirname_length] = '\0';
-    printf("  dirname: %s\n", path);
-    printf("  basename: %s\n", path + dirname_length + 1);
-    free(path);
-  }
-
-  length = wai_getModulePath(NULL, 0, &dirname_length);
-  if (length > 0)
-  {
-    path = (char*)malloc(length + 1);
-    if (!path)
-      abort();
-    wai_getModulePath(path, length, &dirname_length);
-    path[length] = '\0';
-
-    printf("module path: %s\n", path);
-    path[dirname_length] = '\0';
-    printf("  dirname: %s\n", path);
-    printf("  basename: %s\n", path + dirname_length + 1);
-    free(path);
-  }
+  std::string module_path = whereami::getModulePath();
+  printf("module: %s\n", module_path.c_str());
 
   for (i = 1; i < argc; ++i)
   {
